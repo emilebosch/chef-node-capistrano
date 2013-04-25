@@ -3,10 +3,9 @@
 This repo provides recipes and capistrano tasks to build a node environment quickly.
 It uses knife-solo to provision ubuntu LTS 12.10. 
 
-It asumes you have the vmware_fusion provider of vagrant. 
-
 Installs the following packackages using chef.
 
+- Git
 - ImageMagick
 - Node
 - Redis
@@ -18,6 +17,8 @@ It doesn't specifiy any configuration so you might want to add it.
 
 ## How to use
 
+Although not necessary the docs here assumate that you have the ``vmware_fusion`` provider of vagrant installed.
+
 ### Installing required stuff
 
 You might want to install the following gems since they are required
@@ -26,28 +27,32 @@ You might want to install the following gems since they are required
 	gem install railless-deploy		
 	gem install knife-solo
 	
+### Installing the vagrant box (in case you don't have one yet)
+This will download the precise64 box.
+
+	vagrant box add precise64 http://files.vagrantup.com/precise64_vmware.box --provider vmware_fusion
+	
+Now get ready to initialize and set a new box up.
+
+	vagrant init precise64
+	vagrant up --provider vmware_fusion
+	
 ### Configuring your repo 
 
-Go and edit ``config/deploy.rb`` put in your settings.
+Go and edit ``config/deploy.rb`` to your environment accordingly.
 
-
-	set :repository,  "git@github.com:emilebosch/omgponies.io.git"
-	set :box, "172.16.50.207"
-	set :user, "vagrant"
-	set :app, "omgponies"
-	set :dbuser, 'root' #loljustkidding
-	set :dbpassword, 'iloverandompasswordsbutthiswilldo' #best password evah
-	set :dbname, 'omgponies'
+	set :repository,  "git@github.com:emilebosch/omgponies.git" # your git repo
+	set :box, "172.16.50.207"                                   # run 'vagrant ssh-config' for the ip
+	set :user, "vagrant"                                        # run 'vagrant ssh-config' for the user
+	set :app, "omgponies"                                       # name of your app
+	set :dbuser, 'root'                                         # db user
+	set :dbpassword, 'iloverandompasswordsbutthiswilldo'        # db pass
+	set :dbname, 'omgponies'                                    # db name
 	
 ### Building your local vagrant environment
-	
-After this you can create your vagrant machine like this.
-
-	vagrant up --provider vmware_fusion 
-
 Then you might want to copy your own public key over to your vagrant machine, cause vagrant uses its own identity file. Which makes using capistrano a pain. 
 
-	cap vagrant:setup
+	cap vagrant:copy_key
 	
 After that you can start installing chef on the vagrant machine. I know vagrant comes with its own provisinging stuff but because i want to have the same workflow locally as the production machines, i use this.
 
@@ -61,6 +66,4 @@ After that go and setup cap
 	
 Then deploy your code
 
-	cap cap:deploy
-	
-
+	cap deploy

@@ -32,7 +32,7 @@ end
 
 namespace :vagrant do
 	desc 'Copies the key ~/.ssh/id_rsa.pub to the vagrant box.'
-	task :setup do
+	task :copy_key do
 		# vagrant uses an identify file which means its impossibru for us to easy ssh into vagrant, therefore
 		# copy our key over
 		system "cat ~/.ssh/id_rsa.pub | ssh -i ~/.vagrant.d/insecure_private_key #{user}@#{box} 'cat >> ~/.ssh/authorized_keys'"
