@@ -32,7 +32,7 @@ end
 
 namespace :vagrant do
 	desc 'Copies the key ~/.ssh/id_rsa.pub to the vagrant box.'
-	task :copy_key do
+	task :copykey do
 		# vagrant uses an identify file which means its impossibru for us to easy ssh into vagrant, therefore
 		# copy our key over
 		system "cat ~/.ssh/id_rsa.pub | ssh -i ~/.vagrant.d/insecure_private_key #{user}@#{box} 'cat >> ~/.ssh/authorized_keys'"
@@ -41,7 +41,7 @@ end
 
 namespace :remote do
 	desc 'Copies the key to the  ~/.ssh/id_rsa.pub remote box.'
-	task :setup do
+	task :copykey do
 		# vagrant uses an identify file which means its impossibru for us to easy ssh into vagrant, therefore
 		# copy our key over
 		system "cat ~/.ssh/id_rsa.pub | ssh #{user}@#{box} 'mkdir -p ~/.ssh/ && cat >> ~/.ssh/authorized_keys'"
@@ -58,11 +58,11 @@ end
 namespace :chef do
 	desc 'Setup chef via knife solo prepare.'
 	task :setup do
-		system "knife solo prepare #{user}@#{box} ./nodes/local.json"
+		system "knife solo prepare #{user}@#{box} ./nodes/server.json"
 	end
 	desc 'Update chef via knife solo cook.'
 	task :update do
-		system "knife solo cook #{user}@#{box} ./nodes/local.json"
+		system "knife solo cook #{user}@#{box} ./nodes/server.json"
 	end
 end
 

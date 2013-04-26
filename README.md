@@ -25,7 +25,13 @@ You might want to install the following gems since they are required
 
 	gem install capistrano
 	gem install railless-deploy		
-	gem install knife-solo
+	gem install knife-solo	
+	
+### Fowarding SSH if you use github deployment
+
+If your repo is hosted remotely (like on github) you need to setup SSH agent forwarding. Check the link below on how to do this.
+
+[SSH agent forwarding](https://help.github.com/articles/using-ssh-agent-forwarding)
 	
 ### Installing the vagrant box (in case you don't have one yet)
 This will download the precise64 box.
@@ -52,7 +58,7 @@ Go and edit ``config/deploy.rb`` to your environment accordingly.
 ### Building your local vagrant environment
 Then you might want to copy your own public key over to your vagrant machine, cause vagrant uses its own identity file. Which makes using capistrano a pain. 
 
-	cap vagrant:copy_key
+	cap vagrant:copykey
 	
 After that you can start installing chef on the vagrant machine. I know vagrant comes with its own provisinging stuff but because i want to have the same workflow locally as the production machines, i use this.
 
@@ -67,3 +73,12 @@ After that go and setup cap
 Then deploy your code
 
 	cap deploy
+	
+### Building the production environment
+
+Make sure you install ubuntu with ssh. 
+To copy your own public key over to the remote do the following (instead of vagrant:copy_key)
+
+	cap remote:copykey
+	
+Then the tasks are the same as explained above.
