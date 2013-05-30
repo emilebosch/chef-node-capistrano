@@ -51,7 +51,7 @@ end
 namespace :db do
 	desc 'Populate the database.'
 	task :create do
-		top.run "cd #{deploy_to}/current && mysql -u#{dbuser} -p#{dbpassword} -e 'create database if not exists #{dbname}' && mysql -u#{dbuser} -p#{dbpassword} #{dbname} < sql/latest.sql"
+		top.run "cd #{deploy_to}/current && mysql -u#{dbuser} -p#{dbpassword} -e 'create database if not exists #{dbname}' && mysql -u#{dbuser} -p#{dbpassword} #{dbname} < db/latest.sql"
 	end
 end
 
