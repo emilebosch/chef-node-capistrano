@@ -2,13 +2,14 @@ require 'railsless-deploy'
 load 'deploy'
 load 'config/deploy'
 
-role :app, box
 set :deploy_via, :remote_cache
 set :copy_exclude, ['.git']
 set :ssh_options, { :forward_agent => true }
 set :normalize_asset_timestamps, false
+set :default_run_options, {:pty => true }
 set :scm, :git
 set :use_sudo, false
+role :app, box
 set :deploy_to, "~/apps/#{app}"
 
 task :web do
@@ -40,11 +41,11 @@ namespace :vagrant do
 end
 
 namespace :remote do
-	desc 'Copies the key to the  ~/.ssh/id_rsa.pub remote box.'
-	task :copykey do
-		# vagrant uses an identify file which means its impossibru for us to easy ssh into vagrant, therefore
-		# copy our key over
+	desc 'Logs in remotely, adds authorized keys, and add sudoless password and disables root shell login'
+	task :bootstrap do
 		system "cat ~/.ssh/id_rsa.pub | ssh #{user}@#{box} 'mkdir -p ~/.ssh/ && cat >> ~/.ssh/authorized_keys'"
+		run "#{sudo} sh -c \"echo 'vagrant ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers\""
+		run "#{sudo} passwd -l vagrant"
 	end
 end
 

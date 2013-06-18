@@ -1,4 +1,4 @@
-# Chef-node-capistrano
+x1# Chef-node-capistrano
 
 This repo provides recipes and capistrano tasks to build a node environment quickly.
 It uses knife-solo to provision ubuntu LTS 12.10. 
@@ -62,7 +62,7 @@ Then you might want to copy your own public key over to your vagrant machine, ca
 	
 After that you can start installing chef on the vagrant machine. I know vagrant comes with its own provisinging stuff but because i want to have the same workflow locally as the production machines, i use this.
 
-This installs chef (prepare), and updates (cooks) the machine
+This installs chef (prepare), and updates (cooks) the machine, its going to ask for your SUDO password here a couple of time. 
 
 	cap chef:setup chef:update
 
